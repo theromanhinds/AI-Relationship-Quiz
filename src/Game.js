@@ -56,12 +56,7 @@ function Game({gameID, playerID, currentQuestion, setCurrentQuestion}) {
 
       setScore(score);
       restart(gameID);
-      setAnswer('');
-      setSecondPlayerAnswer('');
-      setQuestionAnswered(false);
-      setSecondPlayerAnswered(false);
-      setVoted(false);
-      setSecondPlayerVoted(false);
+      
     };
 
     const handleVote = async (bool) => {
@@ -82,13 +77,24 @@ function Game({gameID, playerID, currentQuestion, setCurrentQuestion}) {
     };
 
     const restart = async (gameID) => {
+      setCurrentQuestion('');
+      setAnswer('');
+      setSecondPlayerAnswer('');
+      setQuestionAnswered(false);
+      setSecondPlayerAnswered(false);
+      setVoted(false);
+      setSecondPlayerVoted(false);
       const result = await resetRound(gameID);
-      generateQuestionForGame(gameID);
+
+      console.log(playerID);
+      if (playerID === 1) {
+        generateQuestionForGame(gameID);
+      }
     }  
 
   return (
     <div>
-        <div>You are in Room {gameID} | You are {playerID}.</div>
+        <div>You are in Room {gameID} | You are Player {playerID}.</div>
         <p>Score || Player1: {score[0]} | Player2: {score[1]}</p>
         
         {(!questionAnswered && !secondPlayerAnswered) && <QuestionComponent 

@@ -1,13 +1,13 @@
 import React from 'react'
 import { useState } from 'react';
 
-function JoinComponent({joinGame}) {
+function JoinComponent({handleJoinGame}) {
 
     const [gameID, setGameID] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const result = await joinGame(gameID); 
+        const result = await handleJoinGame(gameID); 
     };
 
   return (

@@ -29,11 +29,11 @@ export const createGame = async () => {
   
       await setDoc(gameRef, {
         gameID: gameID,              
-        players: ['player1'],
+        players: [1],
         responses:['', ''],
         voted:[false, false],
         score: [0, 0],
-        question: "",
+        questions: [],
       });
   
       console.log('Game created with ID:', gameID);
@@ -63,7 +63,7 @@ export const createGame = async () => {
         
         if (gameData.players.length < 2) {
           await updateDoc(gameRef, {
-            players: arrayUnion('player2'),
+            players: arrayUnion(2),
           });
           console.log('Player joined the game!');
           return { success: true, message: 'Joined the game!' };
@@ -116,7 +116,7 @@ export const createGame = async () => {
       if (gameSnap.exists()) {
         const gameData = gameSnap.data();
         
-        if (playerID === 'player1') {
+        if (playerID === 1) {
           await updateDoc(gameRef, {
             [`responses.${0}`]: answer
           });
@@ -153,7 +153,7 @@ export const createGame = async () => {
             const responses = gameData.responses || []; 
 
             if (responses[0] && responses[1]) {
-              if (playerID === 'player1'){
+              if (playerID === 1){
                 handlePlayer2Answer(responses[1]);
               } else {
                 handlePlayer2Answer(responses[0]);
@@ -177,13 +177,13 @@ export const submitVote = async (gameID, playerID, points) => {
       const gameData = gameSnap.data();
       let newScoreArray = [...gameData.score]; 
 
-      if (playerID === 'player1') {
+      if (playerID === 1) {
         newScoreArray[1] = newScoreArray[1] + points;
         await updateDoc(gameRef, {
           [`voted.${0}`]: true,
           score: newScoreArray 
         });
-      } else if (playerID === 'player2') {
+      } else if (playerID === 2) {
         newScoreArray[0] = newScoreArray[0] + points;
         await updateDoc(gameRef, {
           [`voted.${1}`]: true,
@@ -255,16 +255,27 @@ export const resetRound = async (gameID) => {
 };
 
 export const generateQuestionForGame = async (gameID) => {
-  console.log("trying question request for: " + gameID);
   try {
     const generateQuestion = httpsCallable(functions, 'generateQuestion'); 
-    console.log("generate Q Id: " + gameID);
     const response = await generateQuestion({ gameCode: gameID });
 
-    console.log("response is: " + response);
     const question = response.data.question; 
 
-    await setDoc(doc(db, 'games', gameID), { question: question }, { merge: true });
+    // const gameDocRef = doc(db, 'games', gameID);
+    // const gameDoc = await getDoc(gameDocRef);
+
+    // if (gameDoc.exists()) {
+    //   const currentQuestions = gameDoc.data().questions || [];
+    //   console.log('Current questions:', currentQuestions);
+    // } else {
+    //   console.log('No document found for this gameID.');
+    // }
+
+    // const newQuestionArray = [...gameDoc.data().questions];
+    // newQuestionArray.push(question);
+
+    // // Update the document to include the new question
+    // await updateDoc(gameDocRef, { questions: newQuestionArray });
     
     console.log('Question saved:', question);
   } catch (error) {
@@ -279,8 +290,8 @@ export const listenForQuestion = (gameID, setCurrentQuestion) => {
   
   const unsubscribe = onSnapshot(gameDocRef, (doc) => {
     const data = doc.data();
-    if (data && data.question) {
-      setCurrentQuestion(data.question); 
+    if (data && data.questions) {
+      setCurrentQuestion(data.questions[data.questions.length - 1]); 
     }
   });
 

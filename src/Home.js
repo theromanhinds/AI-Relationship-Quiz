@@ -1,31 +1,37 @@
-import React from 'react'
-import './App.css';
-import StartComponent from './HomeComponents/StartComponent';
-import CreateComponent from './HomeComponents/CreateComponent';
-import JoinComponent from './HomeComponents/JoinComponent';
+// import React from 'react'
+// import './App.css';
+// import StartComponent from './HomeComponents/StartComponent';
+// import CreateComponent from './HomeComponents/CreateComponent';
+// import JoinComponent from './HomeComponents/JoinComponent';
 
-import { useState } from 'react';
+// import { useState } from 'react';
 
-function Home({gameID, createGame, joinGame}) {
+// function Home({gameID, handleCreateGame, joinGame}) {
 
-    const [hosting, setHosting] = useState(0);
+//     const [currentSubMenu, setCurrentSubMenu] = useState("start");
 
-    const handleCreateButtonClick = () => {
-        setHosting(1);
-        createGame();
-    }
+//     const handleCreateButtonClick = () => {
+//         setCurrentSubMenu("create");
+//         handleCreateGame();
+//     }
 
-    const handleJoinButtonClick = () => {
-        setHosting(2);
-    }
+//     const handleJoinButtonClick = () => {
+//         setCurrentSubMenu("join");
+//     }
 
-    return (
-        <div className='HomeContainer'>
+//     const subMenus = {
+//         create: <CreateComponent gameID={gameID}/>,
+//         join: <JoinComponent joinGame={joinGame}/>,
+//         start: <StartComponent handleCreateButtonClick={handleCreateButtonClick} handleJoinButtonClick={handleJoinButtonClick}/>
+//       }
 
-            {hosting === 1 ? <CreateComponent gameID={gameID}/> : hosting === 2 ? <JoinComponent joinGame={joinGame}/> : <StartComponent handleCreateButtonClick={handleCreateButtonClick} handleJoinButtonClick={handleJoinButtonClick}/>}
+//     return (
+//         <div className='HomeContainer'>
 
-        </div>
-    )
-}
+//             {subMenus[currentSubMenu] || <StartComponent/>}
 
-export default Home
+//         </div>
+//     )
+// }
+
+// export default Home

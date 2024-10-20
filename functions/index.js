@@ -47,7 +47,9 @@ exports.generateQuestion = functions.https.onCall(async (data, context) => {
 
     const question = response.choices[0].message.content.trim();
 
-    await gameRef.update({question});
+    await gameRef.update({
+      questions: admin.firestore.FieldValue.arrayUnion(question),
+    });
 
     return {question};
   } catch (error) {
