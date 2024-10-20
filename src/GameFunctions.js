@@ -1,5 +1,7 @@
-import { db } from './firebase';  // Ensure you have the correct Firebase config in 'firebase.js'
-import { collection, doc, setDoc, getDoc, updateDoc, arrayUnion, onSnapshot } from 'firebase/firestore';
+import { db } from './firebase'; 
+import { collection, doc, setDoc, getDoc, updateDoc, arrayUnion, onSnapshot, getFirestore } from 'firebase/firestore';
+import { getFunctions, httpsCallable } from "firebase/functions";
+const functions = getFunctions();
 
 /**
  * Generate a 4-letter game ID using uppercase letters.
@@ -22,20 +24,20 @@ const generateGameID = () => {
  */
 export const createGame = async () => {
     try {
-      const gameID = generateGameID();  // Generate a unique 4-letter game ID
-      const gameRef = doc(collection(db, 'games'), gameID);  // Use the game ID as the document ID
+      const gameID = generateGameID();
+      const gameRef = doc(collection(db, 'games'), gameID); 
   
-      // Create the game document in Firestore with initial player and game data
       await setDoc(gameRef, {
         gameID: gameID,              
         players: ['player1'],
         responses:['', ''],
         voted:[false, false],
-        score: [0, 0]
+        score: [0, 0],
+        question: "",
       });
   
       console.log('Game created with ID:', gameID);
-      return gameID;  // Return the game ID for the first player to share
+      return gameID; 
     } catch (error) {
       console.error('Error creating game:', error);
       throw new Error('Could not create the game.');
@@ -52,16 +54,16 @@ export const createGame = async () => {
    */
   export const joinGame = async (gameID) => {
     try {
-      const gameRef = doc(db, 'games', gameID);  // Reference the game document using the game ID
-      const gameSnap = await getDoc(gameRef);  // Get the document snapshot
+      const gameRef = doc(db, 'games', gameID);  
+      const gameSnap = await getDoc(gameRef); 
   
-      if (gameSnap.exists()) {  // Check if the game exists in Firestore
+      if (gameSnap.exists()) {
         const gameData = gameSnap.data();
   
-        // Check if there are fewer than 2 players in the game
+        
         if (gameData.players.length < 2) {
           await updateDoc(gameRef, {
-            players: arrayUnion('player2'),  // Add the second player to the 'players' array
+            players: arrayUnion('player2'),
           });
           console.log('Player joined the game!');
           return { success: true, message: 'Joined the game!' };
@@ -78,27 +80,23 @@ export const createGame = async () => {
   };
 
   export const listenForPlayer2Join = (gameID, handlePlayer2Join) => {
-    // Reference to the specific game document
     if (!gameID) {
         console.error('Invalid gameID provided.');
-        return () => {}; // Return a no-op function for cleanup
+        return () => {};
     }
 
     const gameRef = doc(db, 'games', gameID);
     let hasPlayer2Joined = false;
 
-    // Setting up the onSnapshot listener
     const unsubscribe = onSnapshot(gameRef, (doc) => {
         if (doc.exists()) {
             const gameData = doc.data();
-            const players = gameData.players || []; // Ensure players is defined
+            const players = gameData.players || [];
 
-            // Check if players[1] has been set for the first time (i.e., when player2 joins)
             if (!hasPlayer2Joined && players[1]) {
-              hasPlayer2Joined = true; // Mark that player2 has joined
-              handlePlayer2Join(players[1]); // Trigger your callback for when player2 joins
+              hasPlayer2Joined = true;
+              handlePlayer2Join(players[1]); 
 
-              // Optional: Unsubscribe from further changes after player2 joins
               unsubscribe();
           }
         } else {
@@ -106,11 +104,8 @@ export const createGame = async () => {
         }
     });
 
-    // Return the unsubscribe function for cleanup
     return unsubscribe;
 };
-
-  ///////////////////////////////////////////////
 
   export const submitAnswer = async (gameID, playerID, answer) => {
     try {
@@ -145,21 +140,18 @@ export const createGame = async () => {
   };
 
   export const listenForPlayer2Answer = (gameID, playerID, handlePlayer2Answer) => {
-    // Reference to the specific game document
     if (!gameID) {
         console.error('Invalid gameID provided.');
-        return () => {}; // Return a no-op function for cleanup
+        return () => {};
     }
 
     const gameRef = doc(db, 'games', gameID);
 
-    // Setting up the onSnapshot listener
     const unsubscribe = onSnapshot(gameRef, (doc) => {
         if (doc.exists()) {
             const gameData = doc.data();
-            const responses = gameData.responses || []; // Ensure responses is defined
+            const responses = gameData.responses || []; 
 
-            // Check if both responses[0] and responses[1] are filled
             if (responses[0] && responses[1]) {
               if (playerID === 'player1'){
                 handlePlayer2Answer(responses[1]);
@@ -173,7 +165,6 @@ export const createGame = async () => {
     });
 
   
-  // Return the unsubscribe function for cleanup
   return unsubscribe;
 };
 
@@ -184,20 +175,19 @@ export const submitVote = async (gameID, playerID, points) => {
 
     if (gameSnap.exists()) {
       const gameData = gameSnap.data();
-      let newScoreArray = [...gameData.score]; // Clone the current score array to avoid mutation
+      let newScoreArray = [...gameData.score]; 
 
-      // Update the correct player's score based on playerID
       if (playerID === 'player1') {
-        newScoreArray[1] = newScoreArray[1] + points; // Increment player1's score
+        newScoreArray[1] = newScoreArray[1] + points;
         await updateDoc(gameRef, {
           [`voted.${0}`]: true,
-          score: newScoreArray // Update the whole score array
+          score: newScoreArray 
         });
       } else if (playerID === 'player2') {
-        newScoreArray[0] = newScoreArray[0] + points; // Increment player2's score
+        newScoreArray[0] = newScoreArray[0] + points;
         await updateDoc(gameRef, {
           [`voted.${1}`]: true,
-          score: newScoreArray // Update the whole score array
+          score: newScoreArray 
         });
       }
 
@@ -215,21 +205,18 @@ export const submitVote = async (gameID, playerID, points) => {
 };
 
 export const listenForPlayer2Vote = (gameID, handlePlayer2Vote) => {
-  // Reference to the specific game document
   if (!gameID) {
       console.error('Invalid gameID provided.');
-      return () => {}; // Return a no-op function for cleanup
+      return () => {}; 
   }
 
   const gameRef = doc(db, 'games', gameID);
 
-  // Setting up the onSnapshot listener
   const unsubscribe = onSnapshot(gameRef, (doc) => {
       if (doc.exists()) {
           const gameData = doc.data();
-          const voted = gameData.voted || []; // Ensure voted is defined
+          const voted = gameData.voted || []; 
 
-          // Check if both responses[0] and responses[1] are filled
           if (voted[0] && voted[1]) {
               handlePlayer2Vote(gameData.score);
         }
@@ -238,8 +225,6 @@ export const listenForPlayer2Vote = (gameID, handlePlayer2Vote) => {
       }
   });
 
-
-// Return the unsubscribe function for cleanup
 return unsubscribe;
 };
 
@@ -269,48 +254,35 @@ export const resetRound = async (gameID) => {
   }
 };
 
-export const listenForScoreChange = (gameID, handleScoreChange) => {
-  // Reference to the specific game document
-  if (!gameID) {
-      console.error('Invalid gameID provided.');
-      return () => {}; // Return a no-op function for cleanup
+export const generateQuestionForGame = async (gameID) => {
+  console.log("trying question request for: " + gameID);
+  try {
+    const generateQuestion = httpsCallable(functions, 'generateQuestion'); 
+    console.log("generate Q Id: " + gameID);
+    const response = await generateQuestion({ gameCode: gameID });
+
+    console.log("response is: " + response);
+    const question = response.data.question; 
+
+    await setDoc(doc(db, 'games', gameID), { question: question }, { merge: true });
+    
+    console.log('Question saved:', question);
+  } catch (error) {
+    console.error("Error generating question:", error);
   }
+};
 
-  const gameRef = doc(db, 'games', gameID);
-  let hasPlayer2Joined = false;
-
-  // Setting up the onSnapshot listener
-  const unsubscribe = onSnapshot(gameRef, (doc) => {
-      if (doc.exists()) {
-          const gameData = doc.data();
-          const players = gameData.players || []; // Ensure players is defined
-
-          if (!hasPlayer2Joined && players[1]) {
-            hasPlayer2Joined = true; 
-            handleScoreChange(); 
-
-            // Optional: Unsubscribe from further changes after player2 joins
-            unsubscribe();
-        }
-      } else {
-          console.log('No such document!');
-      }
+export const listenForQuestion = (gameID, setCurrentQuestion) => {
+  const db = getFirestore();
+  
+  const gameDocRef = doc(db, 'games', gameID);
+  
+  const unsubscribe = onSnapshot(gameDocRef, (doc) => {
+    const data = doc.data();
+    if (data && data.question) {
+      setCurrentQuestion(data.question); 
+    }
   });
 
-  
-  // Return the unsubscribe function for cleanup
   return unsubscribe;
 };
-
-export const updateScore = async (playerID, gameID, points) => {
-  try {
-    const gameRef = doc(db, 'games', gameID);  // Reference the game document using the game ID
-    const gameSnap = await getDoc(gameRef);  // Get the document snapshot
-
-  } catch (error) {
-    console.error('Error submitting answer:', error);
-    return { success: false, message: 'Error submitting answer.' };
-  }
-};
-
-export const questionsList = ["What is the other player's name?"];

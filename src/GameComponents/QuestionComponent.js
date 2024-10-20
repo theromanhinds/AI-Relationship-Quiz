@@ -3,7 +3,7 @@ import React from 'react'
 function QuestionComponent({currentQuestion, setAnswer, answer, handleSubmit}) {
   return (
     <div>
-        <h3>{currentQuestion}</h3>
+        <h3>{currentQuestion || "Waiting for question..."}</h3>
         <form onSubmit={handleSubmit}>
           <input
           onChange={(e) => setAnswer(e.target.value)}

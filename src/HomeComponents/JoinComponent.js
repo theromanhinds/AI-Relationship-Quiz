@@ -6,15 +6,8 @@ function JoinComponent({joinGame}) {
     const [gameID, setGameID] = useState('');
 
     const handleSubmit = async (e) => {
-        e.preventDefault();  // Prevent form from refreshing the page
-        const result = await joinGame(gameID);  // Call the joinGame function
-    
-        //Set a status message based on the result
-        // if (result.success) {
-        //     console.log("Success!")
-        // } else {
-        //     console.log("Error!")
-        // }
+        e.preventDefault();
+        const result = await joinGame(gameID); 
     };
 
   return (
@@ -24,9 +17,9 @@ function JoinComponent({joinGame}) {
           type="text"
           placeholder="Enter game code"
           value={gameID}
-          onChange={(e) => setGameID(e.target.value.toUpperCase())}  // Uppercase to ensure consistency
+          onChange={(e) => setGameID(e.target.value.toUpperCase())} 
           required
-          maxLength="4"  // Limit to 4 characters
+          maxLength="4" 
         />
             <button type="submit">JOIN</button>
         </form>

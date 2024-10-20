@@ -1,11 +1,12 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
+
 import QuestionComponent from './GameComponents/QuestionComponent'
 import VotingCompoent from './GameComponents/VotingCompoent';
 
-import { listenForPlayer2Answer, submitAnswer, listenForPlayer2Vote, resetRound, submitVote, listenForScoreChange, updateScore } from './GameFunctions';
+import { listenForPlayer2Answer, submitAnswer, listenForPlayer2Vote, resetRound, submitVote, listenForQuestion, generateQuestionForGame } from './GameFunctions';
 
-function Game({gameID, playerID, currentQuestion}) {
+function Game({gameID, playerID, currentQuestion, setCurrentQuestion}) {
 
   const [score, setScore] = useState([0, 0]);
 
@@ -17,31 +18,28 @@ function Game({gameID, playerID, currentQuestion}) {
 
   const [voted, setVoted] = useState(false);
   const [secondPlayerVote, setSecondPlayerVoted] = useState(false);
-
   
+  useEffect(() => {
+    const unsubscribe = listenForQuestion(gameID, setCurrentQuestion);
+
+    return () => unsubscribe();
+  }, [gameID]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("submitting answer " + answer);
     const result = await submitAnswer(gameID, playerID, answer);
     setQuestionAnswered(true);
 
-    //Set a status message based on the result
-    // if (result.success) {
-    //   console.log("Success!")
-    // } else {
-    //   console.log("Error!")
-    // }
   }
 
   useEffect(() => {
     const unsubscribe = listenForPlayer2Answer(gameID, playerID, handlePlayer2Answer);
 
-    // Clean up the listener on unmount
     return () => unsubscribe();
   }, [gameID]);
 
   const handlePlayer2Answer = (player2Answer) => {
-    // Your logic when player2 joins
     console.log(`Other player submitted: ${player2Answer}`);
     setSecondPlayerAnswered(true);
     setSecondPlayerAnswer(player2Answer);
@@ -50,12 +48,10 @@ function Game({gameID, playerID, currentQuestion}) {
   useEffect(() => {
     const unsubscribe = listenForPlayer2Vote(gameID, handlePlayer2Vote);
 
-    // Clean up the listener on unmount
     return () => unsubscribe();
     }, [gameID]);
 
     const handlePlayer2Vote = (score) => {
-      // Your logic when player2 joins
       console.log(`Both players voted!`);
 
       setScore(score);
@@ -82,34 +78,13 @@ function Game({gameID, playerID, currentQuestion}) {
   
       setVoted(true);
       const result = await submitVote(gameID, playerID, points);
-  
-      //Set a status message based on the result
-      // if (result.success) {
-      //   console.log("Success!")
-      // } else {
-      //   console.log("Error!")
-      // }
-    
+ 
     };
 
     const restart = async (gameID) => {
       const result = await resetRound(gameID);
-    }
-
-  // useEffect(() => {
-  //   const unsubscribe = listenForScoreChange(gameID, handleScoreChange);
-
-  //   // Clean up the listener on unmount
-  //   return () => unsubscribe();
-  // }, [gameID]);
-
-  const handleScoreChange = (scoreChange) => {
-    // Your logic when player2 joins
-    console.log(`Score changed: ${scoreChange}`);
-    setScore(scoreChange);
-  };
-
-  
+      generateQuestionForGame(gameID);
+    }  
 
   return (
     <div>
