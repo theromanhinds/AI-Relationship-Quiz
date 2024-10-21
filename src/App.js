@@ -65,6 +65,7 @@ function App() {
   }
 
   const handleCreateButtonClick = () => {
+    console.log("handling");
     handleCreateGame();
     setCurrentMenu("create");
     setShowXButton(true);
@@ -73,13 +74,14 @@ function App() {
   const handleNameSubmit = () => {
     setCurrentMenu("start");
     setShowXButton(true);
+    setPlayerName(text);
   }
 
   const menus = {
     create: <CreateComponent gameID={gameID}/>,
     join: <JoinComponent handleJoinGame={handleJoinGame}/>,
     name: <Name text={text} setText={setText} handleNameSubmit={handleNameSubmit}/>,
-    start: <StartComponent handleCreateButtonClick={handleCreateButtonClick} handleJoinButtonClick={handleJoinButtonClick}/>,
+    start: <StartComponent playerName={playerName} handleCreateButtonClick={handleCreateButtonClick} handleJoinButtonClick={handleJoinButtonClick}/>,
     game: <Game gameID={gameID} playerID={playerID} currentQuestion={currentQuestion} setCurrentQuestion={setCurrentQuestion}/>
   }
 
@@ -88,8 +90,11 @@ function App() {
       <div className='WindowContainer'>
 
         <div className='HeaderContainer'>
-          <h1 className='Title'>Julius AI</h1>
-          {showXButton && <button onClick={handleXButtonClick}>X</button>}
+          <h1 className='Title'>Julius</h1>
+          {showXButton && 
+          <button className='XButton' onClick={handleXButtonClick}>
+              <span className="material-symbols-outlined">close</span>
+            </button>}
         </div>
         
         <div className='MenuContainerOuter'>

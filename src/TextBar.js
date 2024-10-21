@@ -1,10 +1,8 @@
-import React, { useState } from 'react'
-
 function TextBar({text, setText, handleNameSubmit}) {
 
     const handleTextBarSubmit = (e) => {
         e.preventDefault();
-        handleNameSubmit()
+        handleNameSubmit();
     }
 
   return (
@@ -16,10 +14,12 @@ function TextBar({text, setText, handleNameSubmit}) {
             type="text"
             value={text}
             placeholder="Julius"
-            maxLength="16"
+            maxLength="12"
             required
             />
-            <button type='submit' className='TextBarButton'>SEND</button>
+            <button type='submit' className='TextBarButton'>
+              <span className="material-symbols-outlined">arrow_upward</span>
+            </button>
         </form>
     </div>
   )
