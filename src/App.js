@@ -1,5 +1,6 @@
 import './App.css';
 import Game from './Game';
+import Name from './Name';
 import StartComponent from './HomeComponents/StartComponent';
 import CreateComponent from './HomeComponents/CreateComponent';
 import JoinComponent from './HomeComponents/JoinComponent';
@@ -10,9 +11,12 @@ import { useState, useEffect } from 'react';
 
 function App() {
 
+  const [playerName, setPlayerName] = useState('');
   const [playerID, setPlayerID] = useState('');
   const [gameID, setGameID] = useState('');
-  const [currentMenu, setCurrentMenu] = useState("home");
+  const [text, setText] = useState('');
+  const [currentMenu, setCurrentMenu] = useState("name");
+  const [showXButton, setShowXButton] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState('');
 
   const handleCreateGame = async () => {
@@ -51,21 +55,30 @@ function App() {
 };
 
   const handleXButtonClick = () => {
-    setCurrentMenu("start");
+    setCurrentMenu("name");
+    setShowXButton(false);
   }
 
   const handleJoinButtonClick = () => {
     setCurrentMenu("join");
+    setShowXButton(true);
   }
 
   const handleCreateButtonClick = () => {
     handleCreateGame();
     setCurrentMenu("create");
+    setShowXButton(true);
+  }
+
+  const handleNameSubmit = () => {
+    setCurrentMenu("start");
+    setShowXButton(true);
   }
 
   const menus = {
     create: <CreateComponent gameID={gameID}/>,
     join: <JoinComponent handleJoinGame={handleJoinGame}/>,
+    name: <Name text={text} setText={setText} handleNameSubmit={handleNameSubmit}/>,
     start: <StartComponent handleCreateButtonClick={handleCreateButtonClick} handleJoinButtonClick={handleJoinButtonClick}/>,
     game: <Game gameID={gameID} playerID={playerID} currentQuestion={currentQuestion} setCurrentQuestion={setCurrentQuestion}/>
   }
@@ -75,12 +88,14 @@ function App() {
       <div className='WindowContainer'>
 
         <div className='HeaderContainer'>
-          <h1 className='Title'>Relationship Quiz!</h1>
-          <button onClick={handleXButtonClick}>X</button>
+          <h1 className='Title'>Julius AI</h1>
+          {showXButton && <button onClick={handleXButtonClick}>X</button>}
+        </div>
+        
+        <div className='MenuContainerOuter'>
+          {menus[currentMenu] || <Name/>}
         </div>
 
-        {menus[currentMenu] || <StartComponent handleCreateButtonClick={handleCreateButtonClick} handleJoinButtonClick={handleJoinButtonClick}/>}
-        
       </div>
     </div>
   );

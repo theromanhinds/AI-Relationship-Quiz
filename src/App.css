@@ -16,11 +16,67 @@
   
 }
 
+.MenuContainerOuter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.MenuContainerInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%; */
+}
+
+.TextBarContainer {
+  position: absolute;
+  bottom: 0;
+  padding-bottom: 2%;
+  width: 100%;
+  height: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around
+}
+
+.TextBarForm {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.TextBarInput {
+  height: 80%;
+  width: 70%;
+}
+
+.TextBarButton {
+  height: 85%;
+  width: 20%;
+}
+
 .HeaderContainer {
   /*background-color: rgb(255, 108, 108);
-  */position: absolute;
+  */
+  position: relative;
   top: 0;
   
+  width: 100%;
   align-items: center;
   justify-content: center;
   text-align: center;
