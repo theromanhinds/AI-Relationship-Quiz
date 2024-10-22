@@ -6,7 +6,7 @@ import VotingCompoent from './GameComponents/VotingCompoent';
 
 import { listenForPlayer2Answer, submitAnswer, listenForPlayer2Vote, resetRound, submitVote, listenForQuestion, generateQuestionForGame } from './GameFunctions';
 
-function Game({gameID, playerID, currentQuestion, setCurrentQuestion, questionNumber}) {
+function Game({gameID, playerID, currentQuestion, setCurrentQuestion, questionNumber, setQuestionNumber, playerName, secondPlayerName}) {
 
   const [score, setScore] = useState([0, 0]);
 
@@ -21,7 +21,6 @@ function Game({gameID, playerID, currentQuestion, setCurrentQuestion, questionNu
   
   useEffect(() => {
     const unsubscribe = listenForQuestion(gameID, setCurrentQuestion);
-
     return () => unsubscribe();
   }, [gameID]);
 
@@ -29,7 +28,6 @@ function Game({gameID, playerID, currentQuestion, setCurrentQuestion, questionNu
     console.log("submitting answer " + answer);
     const result = await submitAnswer(gameID, playerID, answer);
     setQuestionAnswered(true);
-
   }
 
   useEffect(() => {
@@ -76,16 +74,18 @@ function Game({gameID, playerID, currentQuestion, setCurrentQuestion, questionNu
     };
 
     const restart = async (gameID) => {
+      console.log("RESTARTING");
       setCurrentQuestion('');
+      setQuestionNumber(prevCount  => prevCount + 1);
       setAnswer('');
       setSecondPlayerAnswer('');
       setQuestionAnswered(false);
       setSecondPlayerAnswered(false);
       setVoted(false);
       setSecondPlayerVoted(false);
+
       const result = await resetRound(gameID);
 
-      console.log(playerID);
       if (playerID === 1) {
         generateQuestionForGame(gameID);
       }
@@ -93,13 +93,15 @@ function Game({gameID, playerID, currentQuestion, setCurrentQuestion, questionNu
 
   return (
     <div className='MenuContainerOuter'>
-        {(!questionAnswered && !secondPlayerAnswered) && <QuestionComponent 
+        {(!secondPlayerAnswered) && <QuestionComponent 
           currentQuestion={currentQuestion}
           answer={answer} setAnswer={setAnswer}
           handleSubmit={handleSubmit}
-          questionNumber={questionNumber}/>}
-
-        {(questionAnswered && !secondPlayerAnswered) && <p className='SmallText'>Answer Submitted! Waiting for other player!</p>}
+          questionNumber={questionNumber}
+          score={score}
+          questionAnswered={questionAnswered}
+          secondPlayerName={secondPlayerName}
+          playerName={playerName}/>}
 
         {questionAnswered && secondPlayerAnswered && <VotingCompoent
         currentQuestion={currentQuestion}
@@ -107,7 +109,10 @@ function Game({gameID, playerID, currentQuestion, setCurrentQuestion, questionNu
         secondPlayerAnswer={secondPlayerAnswer}
         handleVote={handleVote}
         voted={voted}
-        questionNumber={questionNumber}/>}
+        questionNumber={questionNumber}
+        score={score}
+        playerName={playerName}
+        secondPlayerName={secondPlayerName}/>}
     </div>
   )
 }

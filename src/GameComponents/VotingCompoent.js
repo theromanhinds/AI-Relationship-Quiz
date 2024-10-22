@@ -1,14 +1,14 @@
 import React from 'react'
 import Answers from './Answers'
 
-function VotingCompoent({currentQuestion, answer, secondPlayerAnswer, handleVote, voted, questionNumber}) {
+function VotingCompoent({currentQuestion, answer, secondPlayerAnswer, handleVote, voted, questionNumber, score,  playerName, secondPlayerName}) {
   return (
     <div className='MenuContainerInner'>
 
       <div className='TextContainer'>
-        <p className='SmallText'>Question {questionNumber}</p>
+        <p className='SmallText'>P1: {score[0]} | Question {questionNumber} | P2: {score[1]} </p>
         <h1 className='QuestionText'>{currentQuestion || "Loading..."}</h1>
-        <Answers answer={answer} secondPlayerAnswer={secondPlayerAnswer}/>
+        <Answers playerName={playerName} secondPlayerName={secondPlayerName} answer={answer} secondPlayerAnswer={secondPlayerAnswer}/>
       
       </div>
 

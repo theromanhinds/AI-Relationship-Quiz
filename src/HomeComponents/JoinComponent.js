@@ -16,7 +16,7 @@ function JoinComponent({handleJoinGame}) {
         <h1 className='BigText'>Enter the room code:</h1>
       </div>
 
-      <TextBar maxLength={"4"} placeholder={"ABCD"} text={gameID} setText={setGameID} handleNameSubmit={handleSubmit}/>
+      <TextBar toUpperCase={true} maxLength={"4"} placeholder={"ABCD"} text={gameID} setText={setGameID} handleNameSubmit={handleSubmit}/>
 
     </div>
   )

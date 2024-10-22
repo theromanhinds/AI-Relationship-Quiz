@@ -12,8 +12,9 @@ import { useState, useEffect } from 'react';
 function App() {
 
   const [playerName, setPlayerName] = useState('');
+  const [secondPlayerName, setSecondPlayerName] = useState('Maddie');
   const [playerID, setPlayerID] = useState(0);
-  const [gameID, setGameID] = useState('ABDC');
+  const [gameID, setGameID] = useState('');
   const [text, setText] = useState('');
   const [currentMenu, setCurrentMenu] = useState("name");
   const [showXButton, setShowXButton] = useState(false);
@@ -58,6 +59,9 @@ function App() {
   const handleXButtonClick = () => {
     setPlayerName('');
     setText('');
+    setQuestionNumber(1);
+    setGameID('');
+    setPlayerID(0);
     setCurrentMenu("name");
     setShowXButton(false);
   }
@@ -85,7 +89,7 @@ function App() {
     join: <JoinComponent setText={setText} handleJoinGame={handleJoinGame}/>,
     name: <Name text={text} setText={setText} handleNameSubmit={handleNameSubmit}/>,
     start: <StartComponent playerName={playerName} handleCreateButtonClick={handleCreateButtonClick} handleJoinButtonClick={handleJoinButtonClick}/>,
-    game: <Game gameID={gameID} playerID={playerID} currentQuestion={currentQuestion} setCurrentQuestion={setCurrentQuestion} questionNumber={questionNumber}/>
+    game: <Game playerName={playerName} secondPlayerName={secondPlayerName} gameID={gameID} playerID={playerID} currentQuestion={currentQuestion} setCurrentQuestion={setCurrentQuestion} questionNumber={questionNumber} setQuestionNumber={setQuestionNumber}/>
   }
 
   return (

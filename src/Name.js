@@ -8,7 +8,7 @@ function Name({text, setText, handleNameSubmit}) {
       <div className='TextContainer'>
         <h1 className='BigText'>Enter your name:</h1>
       </div>
-        <TextBar text={text} setText={setText} handleNameSubmit={handleNameSubmit}/>
+        <TextBar toUpperCase={false} text={text} setText={setText} handleNameSubmit={handleNameSubmit}/>
     </div>
   )
 }

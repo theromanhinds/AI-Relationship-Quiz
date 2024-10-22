@@ -260,22 +260,6 @@ export const generateQuestionForGame = async (gameID) => {
     const response = await generateQuestion({ gameCode: gameID });
 
     const question = response.data.question; 
-
-    // const gameDocRef = doc(db, 'games', gameID);
-    // const gameDoc = await getDoc(gameDocRef);
-
-    // if (gameDoc.exists()) {
-    //   const currentQuestions = gameDoc.data().questions || [];
-    //   console.log('Current questions:', currentQuestions);
-    // } else {
-    //   console.log('No document found for this gameID.');
-    // }
-
-    // const newQuestionArray = [...gameDoc.data().questions];
-    // newQuestionArray.push(question);
-
-    // // Update the document to include the new question
-    // await updateDoc(gameDocRef, { questions: newQuestionArray });
     
     console.log('Question saved:', question);
   } catch (error) {
@@ -287,11 +271,18 @@ export const listenForQuestion = (gameID, setCurrentQuestion) => {
   const db = getFirestore();
   
   const gameDocRef = doc(db, 'games', gameID);
+
+  let lastQuestion = null;
   
   const unsubscribe = onSnapshot(gameDocRef, (doc) => {
     const data = doc.data();
     if (data && data.questions) {
-      setCurrentQuestion(data.questions[data.questions.length - 1]); 
+      const latestQuestion = data.questions[data.questions.length - 1];
+
+      if (latestQuestion !== lastQuestion) {
+        setCurrentQuestion(latestQuestion);
+        lastQuestion = latestQuestion;
+      }
     }
   });
 

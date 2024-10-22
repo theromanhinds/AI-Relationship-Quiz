@@ -9,9 +9,7 @@ function CreateComponent({gameID}) {
       </div>
     
     <div className='TextBarContainer'>
-      <div className='WaitingTextContainer'>
         <p className='WaitingText'>Waiting for Player 2!</p>
-      </div>
     </div>
     </div>
   )

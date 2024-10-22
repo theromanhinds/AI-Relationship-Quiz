@@ -1,10 +1,19 @@
 import React from 'react'
 
-function Answers({answer, secondPlayerAnswer}) {
+function Answers({answer, secondPlayerAnswer, playerName, secondPlayerName}) {
   return (
-    <div>
-        <p>You: {answer}</p>
-        <p>They said: {secondPlayerAnswer}</p>
+    <div className='AnswerContainer'>
+
+      <div className='YourAnswer'>
+        <p className='PlayerName'>{playerName}</p>
+        <p className='PlayerAnswer'>{answer}</p>
+      </div>
+
+      <div className='TheirAnswer'>
+      <p className='PlayerName'>{secondPlayerName}</p>
+        <p className='PlayerAnswer'>{secondPlayerAnswer}</p>
+      </div>
+        
     </div>
   )
 }
