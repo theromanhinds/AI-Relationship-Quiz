@@ -1,19 +1,16 @@
 import React from 'react'
+import TextBar from '../TextBar'
 
-function QuestionComponent({currentQuestion, setAnswer, answer, handleSubmit}) {
+function QuestionComponent({currentQuestion, setAnswer, answer, questionNumber, handleSubmit}) {
   return (
-    <div>
-        <h3>{currentQuestion || "Waiting for question..."}</h3>
-        <form onSubmit={handleSubmit}>
-          <input
-          onChange={(e) => setAnswer(e.target.value)}
-          type="text"
-          placeholder="Enter answer"
-          value={answer}
-          required
-          />
-          <button type="submit">SEND</button>
-        </form>
+    <div className='MenuContainerInner'>
+      <div className='TextContainer'>
+        <p className='SmallText'>Question {questionNumber}</p>
+        <h1 className='QuestionText'>{currentQuestion || "Loading..."}</h1>
+      </div>
+
+    <TextBar maxLength={"20"} placeholder={"idek lol"} text={answer} setText={setAnswer} handleNameSubmit={handleSubmit}/>
+
     </div>
   )
 }

@@ -12,12 +12,13 @@ import { useState, useEffect } from 'react';
 function App() {
 
   const [playerName, setPlayerName] = useState('');
-  const [playerID, setPlayerID] = useState('');
-  const [gameID, setGameID] = useState('');
+  const [playerID, setPlayerID] = useState(0);
+  const [gameID, setGameID] = useState('ABDC');
   const [text, setText] = useState('');
   const [currentMenu, setCurrentMenu] = useState("name");
   const [showXButton, setShowXButton] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState('');
+  const [questionNumber, setQuestionNumber] = useState(1);
 
   const handleCreateGame = async () => {
     try {
@@ -55,6 +56,8 @@ function App() {
 };
 
   const handleXButtonClick = () => {
+    setPlayerName('');
+    setText('');
     setCurrentMenu("name");
     setShowXButton(false);
   }
@@ -79,10 +82,10 @@ function App() {
 
   const menus = {
     create: <CreateComponent gameID={gameID}/>,
-    join: <JoinComponent handleJoinGame={handleJoinGame}/>,
+    join: <JoinComponent setText={setText} handleJoinGame={handleJoinGame}/>,
     name: <Name text={text} setText={setText} handleNameSubmit={handleNameSubmit}/>,
     start: <StartComponent playerName={playerName} handleCreateButtonClick={handleCreateButtonClick} handleJoinButtonClick={handleJoinButtonClick}/>,
-    game: <Game gameID={gameID} playerID={playerID} currentQuestion={currentQuestion} setCurrentQuestion={setCurrentQuestion}/>
+    game: <Game gameID={gameID} playerID={playerID} currentQuestion={currentQuestion} setCurrentQuestion={setCurrentQuestion} questionNumber={questionNumber}/>
   }
 
   return (

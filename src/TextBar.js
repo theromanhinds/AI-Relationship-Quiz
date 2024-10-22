@@ -1,4 +1,4 @@
-function TextBar({text, setText, handleNameSubmit}) {
+function TextBar({maxLength, placeholder, text, setText, handleNameSubmit}) {
 
     const handleTextBarSubmit = (e) => {
         e.preventDefault();
@@ -10,11 +10,11 @@ function TextBar({text, setText, handleNameSubmit}) {
         <form className='TextBarForm' onSubmit={handleTextBarSubmit}>
             <input
             className='TextBarInput'
-            onChange={(e) => setText(e.target.value)}
+            onChange={(e) => setText(e.target.value.toUpperCase())}
             type="text"
             value={text}
-            placeholder="Julius"
-            maxLength="12"
+            placeholder={placeholder || "Julius"}
+            maxLength={maxLength || "12"}
             required
             />
             <button type='submit' className='TextBarButton'>

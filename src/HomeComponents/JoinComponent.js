@@ -1,28 +1,23 @@
 import React from 'react'
 import { useState } from 'react';
+import TextBar from '../TextBar';
 
 function JoinComponent({handleJoinGame}) {
 
     const [gameID, setGameID] = useState('');
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
         const result = await handleJoinGame(gameID); 
     };
 
   return (
-    <div>
-        <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Enter game code"
-          value={gameID}
-          onChange={(e) => setGameID(e.target.value.toUpperCase())} 
-          required
-          maxLength="4" 
-        />
-            <button type="submit">JOIN</button>
-        </form>
+    <div className='MenuContainerInner'>
+      <div className='TextContainer'>
+        <h1 className='BigText'>Enter the room code:</h1>
+      </div>
+
+      <TextBar maxLength={"4"} placeholder={"ABCD"} text={gameID} setText={setGameID} handleNameSubmit={handleSubmit}/>
+
     </div>
   )
 }

@@ -6,7 +6,7 @@ import VotingCompoent from './GameComponents/VotingCompoent';
 
 import { listenForPlayer2Answer, submitAnswer, listenForPlayer2Vote, resetRound, submitVote, listenForQuestion, generateQuestionForGame } from './GameFunctions';
 
-function Game({gameID, playerID, currentQuestion, setCurrentQuestion}) {
+function Game({gameID, playerID, currentQuestion, setCurrentQuestion, questionNumber}) {
 
   const [score, setScore] = useState([0, 0]);
 
@@ -26,7 +26,6 @@ function Game({gameID, playerID, currentQuestion, setCurrentQuestion}) {
   }, [gameID]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
     console.log("submitting answer " + answer);
     const result = await submitAnswer(gameID, playerID, answer);
     setQuestionAnswered(true);
@@ -93,23 +92,22 @@ function Game({gameID, playerID, currentQuestion, setCurrentQuestion}) {
     }  
 
   return (
-    <div>
-        <div>You are in Room {gameID} | You are Player {playerID}.</div>
-        <p>Score || Player1: {score[0]} | Player2: {score[1]}</p>
-        
+    <div className='MenuContainerOuter'>
         {(!questionAnswered && !secondPlayerAnswered) && <QuestionComponent 
           currentQuestion={currentQuestion}
           answer={answer} setAnswer={setAnswer}
-          handleSubmit={handleSubmit}/>}
+          handleSubmit={handleSubmit}
+          questionNumber={questionNumber}/>}
 
-        {(questionAnswered && !secondPlayerAnswered) && <p>Answer Submitted! Waiting for player2!</p>}
+        {(questionAnswered && !secondPlayerAnswered) && <p className='SmallText'>Answer Submitted! Waiting for other player!</p>}
 
         {questionAnswered && secondPlayerAnswered && <VotingCompoent
         currentQuestion={currentQuestion}
         answer={answer}
         secondPlayerAnswer={secondPlayerAnswer}
         handleVote={handleVote}
-        voted={voted}/>}
+        voted={voted}
+        questionNumber={questionNumber}/>}
     </div>
   )
 }

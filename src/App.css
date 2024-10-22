@@ -58,6 +58,12 @@
   padding: 0px;
 }
 
+.QuestionText {
+  font-size: 40px;
+  margin: 0px;
+  padding: 0px;
+}
+
 .SmallText {
   /* background-color: red; */
   font-size: 24px;
@@ -74,6 +80,10 @@
   height: 10%;
   display: flex;
   align-items: center;
+}
+
+.TextBarHoverText {
+  
 }
 
 .TextBarForm {
@@ -128,7 +138,8 @@
 
 .XButton {
   position: absolute;
-  right: 12px;
+  top: 16px;
+  right: 16px;
   height: 40px;
   width: 40px;
   border-radius: 12px;
@@ -160,6 +171,7 @@
 }
 
 .Title {
+  font-size: 32px;
   margin: 0;
   padding: 20px;
 }
