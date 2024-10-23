@@ -223,7 +223,7 @@
 }
 
 .HomeContainer {
-  */width: 50%;
+  width: 50%;
   height: 50%;
   text-align: center;
   display: flex;
@@ -305,7 +305,7 @@
   }
 
   .Title {
-    font-size: 20px;
+    font-size: 24px;
   }
 
   .XButton {

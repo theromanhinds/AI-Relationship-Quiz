@@ -25,22 +25,32 @@ exports.generateQuestion = functions.https.onCall(async (data, context) => {
       throw new functions.https.HttpsError("not-found", "Game not found.");
     }
 
+    const prevQuestions = gameDoc.data().questions || [];
+    const contentArray = prevQuestions.map((question) => {
+      return {type: "text", text: `Previous Question: ${question}`};
+    });
+
     const response = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4o",
       messages: [
         {
-          role: "system",
-          content: "You are the host of a quiz show testing the " +
-              "knowledge of partners in a dating relationship to see " +
-              "how accurately they know each other.",
+          role: "assistant",
+          content: contentArray,
         },
         {
           role: "user",
-          content: "Give me one question in 12 words or less that " +
-              "the couple should be asked.",
+          content: "You are the host of a quiz show testing the knowledge " +
+         "of a boyfriend and girlfriend to see how well they know " +
+         "each other. Give me one question in 12 words or less " +
+         "that the couple should be asked.\n\n" +
+         "This question should be specific. This question should not " +
+         "include a follow up question like 'and why?'. This question " +
+         "shouldn't be fact checking shared experiences between the couple. " +
+         "This question should use 'their' instead of 'your partner'." +
+         "This question should not repeat a previous question.",
         },
       ],
-      max_tokens: 30,
+      max_tokens: 100,
     });
 
     const question = response.choices[0].message.content.trim();
