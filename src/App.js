@@ -32,10 +32,13 @@ function App() {
   const handleJoinGame = async (gameID) => {
     try {
       const result = await joinGame(gameID, playerName);
-      setSecondPlayerName(result);
-      setGameID(gameID);
-      setPlayerID(2);
-      setCurrentMenu("game");
+
+      if (result) {
+        setSecondPlayerName(result);
+        setGameID(gameID);
+        setPlayerID(2);
+        setCurrentMenu("game");
+      }
   
     } catch (error) { console.error(error); } };
 

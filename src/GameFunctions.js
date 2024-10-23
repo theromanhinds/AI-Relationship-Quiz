@@ -70,14 +70,14 @@ export const createGame = async (playerName) => {
           });
           return newPlayerNamesArray[0];
         } else {
-          return { success: false, message: 'The game is full.' };
+          return false;
         }
       } else {
-        return { success: false, message: 'Game not found.' };
+        return false;
       }
     } catch (error) {
       console.error('Error joining game:', error);
-      return { success: false, message: 'Error joining the game.' };
+      return false;
     }
   };
 

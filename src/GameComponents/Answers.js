@@ -5,7 +5,7 @@ function Answers({answer, secondPlayerAnswer, playerName, secondPlayerName}) {
     <div className='AnswerContainer'>
 
       <div className='YourAnswer'>
-        <p className='PlayerName'>{playerName}</p>
+        <p className='PlayerName'>You</p>
         <p className='PlayerAnswer'>{answer}</p>
       </div>
 

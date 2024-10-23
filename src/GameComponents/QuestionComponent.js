@@ -5,7 +5,7 @@ function QuestionComponent({currentQuestion, setAnswer, answer, questionNumber, 
   return (
     <div className='MenuContainerInner'>
       <div className='TextContainer'>
-        <p className='SmallText'>{playerID === 1 ? playerName : secondPlayerName}: {score[0]} | Question {questionNumber} | {playerID === 1 ? secondPlayerName : playerName}: {score[1]}</p>
+        <p className='ScoreBoard'>{playerID === 1 ? playerName : secondPlayerName}: {score[0]} | Question {questionNumber} | {playerID === 1 ? secondPlayerName : playerName}: {score[1]}</p>
         <h1 className='QuestionText'>{currentQuestion || "Loading..."}</h1>
       </div>
 
