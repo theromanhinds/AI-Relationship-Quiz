@@ -11,9 +11,7 @@ const openai = new OpenAI({
 });
 
 exports.generateQuestion = functions.https.onCall(async (data, context) => {
-  console.log(data.data);
   const gameCode = data.data.gameCode;
-  console.log("GAME CODE IS " + gameCode);
   if (!gameCode) {
     throw new functions.https.HttpsError("invalid-argument",
         "The game code is required.");

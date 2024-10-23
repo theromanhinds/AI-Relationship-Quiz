@@ -25,7 +25,6 @@ function Game({gameID, playerID, currentQuestion, setCurrentQuestion, questionNu
   }, [gameID]);
 
   const handleSubmit = async (e) => {
-    console.log("submitting answer " + answer);
     const result = await submitAnswer(gameID, playerID, answer);
     setQuestionAnswered(true);
   }
@@ -37,7 +36,6 @@ function Game({gameID, playerID, currentQuestion, setCurrentQuestion, questionNu
   }, [gameID]);
 
   const handlePlayer2Answer = (player2Answer) => {
-    console.log(`Other player submitted: ${player2Answer}`);
     setSecondPlayerAnswered(true);
     setSecondPlayerAnswer(player2Answer);
   };
@@ -49,8 +47,6 @@ function Game({gameID, playerID, currentQuestion, setCurrentQuestion, questionNu
     }, [gameID]);
 
     const handlePlayer2Vote = (score) => {
-      console.log(`Both players voted!`);
-
       setScore(score);
       restart(gameID);
       
@@ -62,9 +58,7 @@ function Game({gameID, playerID, currentQuestion, setCurrentQuestion, questionNu
 
       if (bool){
         points = 1;
-        console.log("You voted YES!");
       } else {
-        console.log("You voted NO!");
   
       }
   
@@ -74,7 +68,6 @@ function Game({gameID, playerID, currentQuestion, setCurrentQuestion, questionNu
     };
 
     const restart = async (gameID) => {
-      console.log("RESTARTING");
       setCurrentQuestion('');
       setQuestionNumber(prevCount  => prevCount + 1);
       setAnswer('');
@@ -101,7 +94,8 @@ function Game({gameID, playerID, currentQuestion, setCurrentQuestion, questionNu
           score={score}
           questionAnswered={questionAnswered}
           secondPlayerName={secondPlayerName}
-          playerName={playerName}/>}
+          playerName={playerName}
+          playerID={playerID}/>}
 
         {questionAnswered && secondPlayerAnswered && <VotingCompoent
         currentQuestion={currentQuestion}
@@ -112,7 +106,8 @@ function Game({gameID, playerID, currentQuestion, setCurrentQuestion, questionNu
         questionNumber={questionNumber}
         score={score}
         playerName={playerName}
-        secondPlayerName={secondPlayerName}/>}
+        secondPlayerName={secondPlayerName}
+        playerID={playerID}/>}
     </div>
   )
 }

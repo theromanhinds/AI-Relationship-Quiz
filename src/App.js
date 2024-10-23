@@ -12,7 +12,7 @@ import { useState, useEffect } from 'react';
 function App() {
 
   const [playerName, setPlayerName] = useState('');
-  const [secondPlayerName, setSecondPlayerName] = useState('Maddie');
+  const [secondPlayerName, setSecondPlayerName] = useState('');
   const [playerID, setPlayerID] = useState(0);
   const [gameID, setGameID] = useState('');
   const [text, setText] = useState('');
@@ -23,18 +23,16 @@ function App() {
 
   const handleCreateGame = async () => {
     try {
-      const newGameID = await createGame();
+      const newGameID = await createGame(playerName);
       setGameID(newGameID);
       setPlayerID(1);
   
-      console.log(`Game created!`);
     } catch (error) { console.error(error); } };
 
   const handleJoinGame = async (gameID) => {
     try {
-      const result = await joinGame(gameID);
-      
-      console.log("Successfully joined Game " + gameID);
+      const result = await joinGame(gameID, playerName);
+      setSecondPlayerName(result);
       setGameID(gameID);
       setPlayerID(2);
       setCurrentMenu("game");
@@ -50,8 +48,8 @@ function App() {
     return () => unsubscribe();
   }, [gameID]);
 
-  const handlePlayer2Join = (player2) => {
-    console.log(`Player 2 has joined: ${player2}`);
+  const handlePlayer2Join = (player2Name) => {
+    setSecondPlayerName(player2Name);
     setCurrentMenu("game");
     generateQuestionForGame(gameID);
 };
@@ -72,7 +70,6 @@ function App() {
   }
 
   const handleCreateButtonClick = () => {
-    console.log("handling");
     handleCreateGame();
     setCurrentMenu("create");
     setShowXButton(true);

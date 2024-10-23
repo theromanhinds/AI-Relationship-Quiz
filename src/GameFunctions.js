@@ -22,7 +22,7 @@ const generateGameID = () => {
  * 
  * @returns {Promise<string>} - Returns the generated game ID.
  */
-export const createGame = async () => {
+export const createGame = async (playerName) => {
     try {
       const gameID = generateGameID();
       const gameRef = doc(collection(db, 'games'), gameID); 
@@ -30,13 +30,13 @@ export const createGame = async () => {
       await setDoc(gameRef, {
         gameID: gameID,              
         players: [1],
+        playerNames:[`${playerName}`, ''],
         responses:['', ''],
         voted:[false, false],
         score: [0, 0],
         questions: [],
       });
   
-      console.log('Game created with ID:', gameID);
       return gameID; 
     } catch (error) {
       console.error('Error creating game:', error);
@@ -52,21 +52,23 @@ export const createGame = async () => {
    * @param {string} gameID - The 4-letter game ID entered by the player.
    * @returns {Promise<Object>} - Returns an object with success status and message.
    */
-  export const joinGame = async (gameID) => {
+  export const joinGame = async (gameID, playerName) => {
     try {
       const gameRef = doc(db, 'games', gameID);  
       const gameSnap = await getDoc(gameRef); 
   
       if (gameSnap.exists()) {
         const gameData = gameSnap.data();
-  
+        
+        let newPlayerNamesArray = [...gameData.playerNames];
+        newPlayerNamesArray[1] = playerName;
         
         if (gameData.players.length < 2) {
           await updateDoc(gameRef, {
             players: arrayUnion(2),
+            playerNames: newPlayerNamesArray,
           });
-          console.log('Player joined the game!');
-          return { success: true, message: 'Joined the game!' };
+          return newPlayerNamesArray[0];
         } else {
           return { success: false, message: 'The game is full.' };
         }
@@ -91,11 +93,11 @@ export const createGame = async () => {
     const unsubscribe = onSnapshot(gameRef, (doc) => {
         if (doc.exists()) {
             const gameData = doc.data();
-            const players = gameData.players || [];
+            const playerNames = gameData.playerNames || [];
 
-            if (!hasPlayer2Joined && players[1]) {
+            if (!hasPlayer2Joined && playerNames[1]) {
               hasPlayer2Joined = true;
-              handlePlayer2Join(players[1]); 
+              handlePlayer2Join(playerNames[1]); 
 
               unsubscribe();
           }
@@ -110,7 +112,6 @@ export const createGame = async () => {
   export const submitAnswer = async (gameID, playerID, answer) => {
     try {
       const gameRef = doc(db, 'games', gameID);
-      console.log("Fetching game document:", gameRef.path);
       const gameSnap = await getDoc(gameRef);
       
       if (gameSnap.exists()) {
@@ -126,7 +127,6 @@ export const createGame = async () => {
           });
         }
 
-        console.log('Submitted answer!');
         return { success: true, message: 'Submitted answer!' };
 
       } else {
@@ -191,7 +191,6 @@ export const submitVote = async (gameID, playerID, points) => {
         });
       }
 
-      console.log('Submitted vote and updated score!');
       return { success: true, message: 'Submitted vote!' };
     } else {
       console.log("Game document does not exist");
@@ -241,7 +240,6 @@ export const resetRound = async (gameID) => {
         voted: [false, false]
       });
 
-      console.log('Round reset!');
       return { success: true, message: 'Round reset' };
 
     } else {
@@ -261,7 +259,6 @@ export const generateQuestionForGame = async (gameID) => {
 
     const question = response.data.question; 
     
-    console.log('Question saved:', question);
   } catch (error) {
     console.error("Error generating question:", error);
   }
