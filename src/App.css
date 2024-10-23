@@ -27,20 +27,18 @@
   flex-direction: column;
 }
 
-.HeaderContainer {
-  /* background-color: #4b0325; */
- 
+.HeaderContainer { 
   width: 100%;
+  height: 10%;
+
+  display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
+  flex-direction: row;
 
-  display: flex;
-  flex-direction: center;
   padding: 10px 20px;
-  height: 10%;
   box-shadow: 0 2.5px 5px rgba(0, 0, 0, 0.4);
-
 }
 
 .Title {
@@ -60,40 +58,39 @@
   overflow: hidden;
 }
 
-@media (max-width: 768px) {
-  .Title {
-    /* font-size: 28px; Smaller title for mobile */
-  }
 
-  .XButton {
-    /* font-size: 1.2rem; Smaller button for mobile */
-  }
-
-  .HeaderContainer {
-    /* padding: 8px 16px; Reduce padding for smaller screens */
-  }
-
-  .MenuContainerOuter {
-    /* padding: 8px; Smaller padding for mobile */
-  }
+.XButton {
+  background-color: #a10a44;
+  position: absolute;
+  top: 10px;
+  right: 16px;
+  height: 40px;
+  width: 40px;
+  border-radius: 12px;
+  border-color: transparent;
+  box-shadow: inset;
+  box-shadow: 0 2.5px 5px rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-@media (max-width: 480px) {
-  .Title {
-    /* font-size: 1rem; Even smaller title for very small screens */
-  }
+.XButton .material-symbols-outlined {
+  color: white;
+  font-size: 24px;
+}
 
-  .XButton {
-    /* font-size: 1rem; Smaller button for very small screens */
-  }
+.SmallText {
+  font-size: 24px;
+}
 
-  .HeaderContainer {
-    /* padding: 6px 12px; Adjust padding for very small screens */
-  }
+.WaitingTextContainer {
+  width: 100%;
+  height: 100%;
+}
 
-  .MenuContainerOuter {
-    /* padding: 6px; Adjust padding for very small screens */
-  }
+.WaitingText {
+  font-size: 24px;
 }
 
 .MenuContainerInner {
@@ -109,7 +106,7 @@
 
 .TextContainer {
   height: 100%;
-  width: 80%;
+  width: 90%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -118,7 +115,6 @@
 }
 
 .BigText {
-  /* background-color: yellow; */
   font-size: 64px;
   margin: 0px;
   padding: 0px;
@@ -130,11 +126,6 @@
   margin: 0px;
   padding: 0px;
   margin-bottom: 200px;
-}
-
-.SmallText {
-  /* background-color: red; */
-  font-size: 24px;
 }
 
 .ScoreBoard {
@@ -164,9 +155,9 @@
 
 .TextBarForm {
   position: relative;
-  top: 20%;
+  top: 15%;
   width: 100%;
-  height: 65%;
+  height: 80%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -184,6 +175,11 @@
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
 }
 
+.TextBarInput:disabled {
+  color: white;
+}
+
+
 .TextBarButton {
   background-color: #a10a44;
 
@@ -193,26 +189,6 @@
   border-color: transparent;
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
 
-}
-
-@media (max-width: 768px) {
-  .BigText {
-    /* font-size: 1.5rem; Smaller text on tablet/mobile */
-  }
-
-  .TextBar {
-    /* padding: 8px; */
-  }
-}
-
-@media (max-width: 480px) {
-  .BigText {
-    /* font-size: 1.2rem; Smaller text on smaller devices */
-  }
-
-  .TextBar {
-    /* padding: 6px; */
-  }
 }
 
 .BigButtonContainer {
@@ -226,20 +202,11 @@
   max-width: 400px;
 }
 
-.WaitingTextContainer {
-  width: 100%;
-  height: 100%;
-}
-
-.WaitingText {
-  font-size: 24px;
-}
-
 .BigButton {
   background-color: #a10a44;
   color: white;
   width: 45%;
-  height: 55%;
+  height: 75%;
   border-radius: 12px;
   border-color: transparent;
   margin-left: 6px;
@@ -249,32 +216,13 @@
 
 }
 
-.XButton {
-  background-color: #a10a44;
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  height: 40px;
-  width: 40px;
-  border-radius: 12px;
-  border-color: transparent;
-  box-shadow: inset;
-  box-shadow: 0 2.5px 5px rgba(0, 0, 0, 0.4);
-
-}
-
-.XButton .material-symbols-outlined {
-  color: white;
-  font-size: 24px; /* Or any size you prefer */
-}
 
 .TextBarButton .material-symbols-outlined {
-  font-size: 32px; /* Or any size you prefer */
+  font-size: 32px;
   color: white;
 }
 
 .HomeContainer {
-  /*background-color: rgb(203, 6, 6);
   */width: 50%;
   height: 50%;
   text-align: center;
@@ -284,69 +232,129 @@
 }
 
 .AnswerContainer {
-  /* background-color: wheat; */
   position: absolute;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   bottom: 20%;
   width: 90%;
-  height: 30%;
+  height: 40%;
   padding: 10px;
   max-width: 400px;
 }
 
 .YourAnswer {
-  width: 60%;
+  max-width: 70%; 
+  min-width: 30%; 
   position: relative;
-  align-self: flex-end; /* Align this answer to the right */
+  align-self: flex-end; 
   background-color: #a10a44;
-
   border-radius: 12px;
   padding: 10px;
   box-shadow: 0 2.5px 5px rgba(0, 0, 0, 0.4);
-
+  word-wrap: break-word; 
 }
 
 .TheirAnswer {
   color: #a10a44;
   background-color: #ffffff;
-  width: 60%;
+  max-width: 70%;
+  min-width: 30%; 
   position: relative;
-  align-self: flex-start; /* Align this answer to the left */
+  align-self: flex-start; 
   border-radius: 12px;
   padding: 10px;
   box-shadow: 0 2.5px 5px rgba(0, 0, 0, 0.4);
-
+  margin-top: 20px;
+  word-wrap: break-word;
 }
 
 .PlayerName {
-  font-size: 18px; /* Small text for the player's name */
+  font-size: 18px;
   position: absolute;
   top: 0;
   margin: 10px;
 }
 
 .YourAnswer .PlayerName {
-  right: 0; /* Align to the top right inside YourAnswer */
+  right: 0;
 }
 
 .TheirAnswer .PlayerName {
-  left: 0; /* Align to the top left inside TheirAnswer */
+  left: 0;
 }
 
 .PlayerAnswer {
-  font-size: 28px; /* Bigger text for the answers */
-  /* margin: 10px;  */
+  font-size: 28px;
   margin-top: 25px;
   margin-bottom: 0px;
 
 }
 
 .YourAnswer .PlayerAnswer {
-  text-align: right; /* Align answer text to the right */
+  text-align: right;
 }
 
 .TheirAnswer .PlayerAnswer {
-  text-align: left; /* Align answer text to the left */
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .BigText {
+    font-size: 32px;
+  }
+
+  .Title {
+    font-size: 20px;
+  }
+
+  .XButton {
+    width: 40px;
+    height: 40px;
+  }
+
+  .MenuContainerOuter {
+    padding: 8px;
+  }
+
+  .SmallText{
+    font-size: 16px;
+  }
+
+  .WaitingText {
+    font-size: 16px;
+  }
+
+  .QuestionText {
+    font-size: 24px;
+    margin: 0px;
+    padding: 0px;
+    margin-bottom: 200px;
+  }
+
+  .ScoreBoard {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .TextBarHoverText {
+    position: absolute;
+    top: -12px;
+    font-size: 16px;
+  }
+  
+  .PlayerName {
+    font-size: 16px;
+    position: absolute;
+    top: 0;
+    margin: 10px;
+  }
+  
+  .PlayerAnswer {
+    font-size: 20px;
+    margin-top: 25px;
+    margin-bottom: 0px;
+  
+  }
+  
 }
