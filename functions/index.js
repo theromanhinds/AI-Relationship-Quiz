@@ -44,7 +44,7 @@ exports.generateQuestion = functions.https.onCall(async (data, context) => {
          "each other. Give me one question in 12 words or less " +
          "that the couple should be asked.\n\n" +
          "This question should be specific. This question should not " +
-         "include a follow up question like 'and why?'. This question " +
+         "use the word 'why' or ask 'why' as a follow-up. This question " +
          "shouldn't be fact checking shared experiences between the couple. " +
          "This question should use 'their' instead of 'your partner'." +
          "This question should not repeat a previous question.",
