@@ -21,6 +21,21 @@ function App() {
   const [currentQuestion, setCurrentQuestion] = useState('');
   const [questionNumber, setQuestionNumber] = useState(1);
 
+  useEffect(() => {
+    const handleResize = () => {
+      document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+    };
+
+    // Initial setting of the height
+    handleResize();
+
+    // Adjust the height when the window is resized (e.g. on mobile scroll)
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup the event listener
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const handleCreateGame = async () => {
     try {
       const newGameID = await createGame(playerName);

@@ -16,3 +16,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.html, body {
+  height: calc(var(--vh, 1vh) * 100); /* Use the dynamically calculated height */
+}

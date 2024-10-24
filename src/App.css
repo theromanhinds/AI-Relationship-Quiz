@@ -11,8 +11,8 @@
   flex-direction: column;
   overflow: hidden;
   text-align: center;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100); /* Apply the fixed height */
   color: white;
 }
 
